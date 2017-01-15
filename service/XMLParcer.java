@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import DAO.FileReader;
 
@@ -88,7 +90,7 @@ public class XMLParcer {
 					}				
 				}							
 			}
-			index++;		
+			index = getNextTagIndex(index, file)-1;		
 	
 			try{
 				
@@ -103,11 +105,22 @@ public class XMLParcer {
 	
 	public void setFile(String fileName){
 		try{
-			this.file = FileReader.readFromFile("d://plant_catalog.xml", StandardCharsets.UTF_8);
+			this.file = FileReader.readFromFile("d://notes.xml", StandardCharsets.UTF_8);
 			
 		} catch(IOException e){
 			System.out.println(e.getMessage());
 		}
+	}
+	
+	public int getTagQuantity(){
+		Pattern p = Pattern.compile("<");
+		Matcher m = p.matcher(file);
+		
+		int countOfTags = 0;
+		while(m.find()){
+			countOfTags++;
+		}
+		return countOfTags;
 	}
 	
 	private static String getTagName(int index, String file){ // возвращает имя тэга которое зачитается с index
@@ -123,7 +136,13 @@ public class XMLParcer {
 	
 	private static int getNextTagIndex(int index, String file){ // ищем следующий тэг
 		
-		while(file.charAt(index) != '<') index++;
+		try{
+			while(file.charAt(index) != '<') index++;
+			
+		} catch(StringIndexOutOfBoundsException e){
+			System.out.println("Конец документа");
+		}
+		
 		
 		return ++index;
 	}

@@ -13,10 +13,13 @@ public class Test {
 			
 		XMLParcer parcer = new XMLParcer();
 		parcer.setFile("d://plant_catalog.xml");
-		for(int i = 0;i<300;i++)
-		parcer.nextParce();
+		
+			for (int i = 0; i < 100; i++) {
+				parcer.nextParce();
+			}
+		}
 	
 
-	}
+	
 	
 }
